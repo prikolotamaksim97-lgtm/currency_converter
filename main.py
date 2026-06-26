@@ -79,10 +79,10 @@ class CurrencyConverter(QWidget):
         """Возвращает коэффициент по API или из CACHE, актуальные дату и время"""
         sell = self.sell.currentText()
         buy = self.buy.currentText()
+        key = f"{sell}_{buy}"
+        cache = load_cache()
 
         try:
-            cache = load_cache()
-            key = f"{sell}_{buy}"
 
             response = get(
                 f"https://api.frankfurter.dev/v2/rate/{sell}/{buy}", timeout=5)
@@ -152,7 +152,8 @@ class CurrencyConverter(QWidget):
         self.buy.setCurrentText(sell)
         self.convert()
 
-app = QApplication(sys.argv)
-window = CurrencyConverter()
-window.show()
-app.exec()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = CurrencyConverter()
+    window.show()
+    sys.exit(app.exec())
