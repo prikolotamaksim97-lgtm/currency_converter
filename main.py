@@ -79,15 +79,14 @@ class CurrencyConverter(QWidget):
         """Возвращает коэффициент по API или из CACHE, актуальные дату и время"""
         sell = self.sell.currentText()
         buy = self.buy.currentText()
-        key = f"{sell}_{buy}"
         cache = load_cache()
+        key = f"{sell}_{buy}"
 
         try:
 
             response = get(
                 f"https://api.frankfurter.dev/v2/rate/{sell}/{buy}", timeout=5)
-            response.raise_for_status()
-            
+                        
             coef = response.json()['rate']
             
             updated = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
@@ -114,7 +113,7 @@ class CurrencyConverter(QWidget):
         buy = self.buy.currentText()
 
         try:
-            amount = float(self.amount.text().strip().replace(',', '.'))
+            amount = self.amount.text().strip().replace(',', '.')
             coef = None
             updated = None
 
@@ -129,7 +128,7 @@ class CurrencyConverter(QWidget):
                 self.result.setText("😿 Нет интернета и отсутствует сохраненный курс")
                 return
             
-            amount = float(Decimal(str(amount)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+            amount = float(Decimal(amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
             res = Decimal(str(amount * coef)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
             if updated:
