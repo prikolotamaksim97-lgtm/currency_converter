@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QLabel, QLineEdit, QPushButt
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 import sys
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 from requests import get
 import json
 import os
@@ -138,7 +138,7 @@ class CurrencyConverter(QWidget):
                 self.result.setText(f"{amount} {sell} ➜ {res} {buy}")
 
 
-        except ValueError:
+        except (ValueError, InvalidOperation):
             self.result.setText("😿 Извините, могу конвертировать только числа")
             self.date.setText("")
 
